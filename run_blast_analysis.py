@@ -21,16 +21,22 @@ def get_fasta_file():
         print("Le fichier n'a pas été trouvé. Veuillez vérifier le chemin.")
         return None
 
-# Exemple d'utilisation
-sequences = get_fasta_file()
 
-def run_blast(sequences):
+def get_blast_parameters():
+    # Demander à l'utilisateur de spécifier les paramètres de BLAST
+    program = input("Entrez le programme BLAST (blastn, blastp, blastx, tblastn, tblastx) [default: blastn] : ") or "blastn"
+    database = input("Entrez la base de données BLAST (nt, nr, etc.) [default: nt] : ") or "nt"
+    evalue = input("Entrez la valeur E-value seuil [default: 0.001] : ") or "0.001"
+    return program, database, float(evalue)
+
+
+def run_blast(sequences, program, database, evalue):
     # Prendre la première séquence pour l'exemple
     sequence = sequences[0].seq
     
-    # Exécuter BLAST avec la séquence
-    print("Envoi de la séquence à BLAST...")
-    result_handle = NCBIWWW.qblast("blastn", "nt", sequence)
+    # Exécuter BLAST avec les paramètres spécifiés
+    print(f"Lancement de BLAST avec le programme '{program}', base '{database}', et E-value seuil {evalue}...")
+    result_handle = NCBIWWW.qblast(program, database, sequence, expect=evalue)
     
     # Sauvegarder les résultats dans un fichier XML
     with open("blast_results.xml", "w") as out_handle:
@@ -39,9 +45,6 @@ def run_blast(sequences):
     print("Les résultats BLAST ont été enregistrés dans 'blast_results.xml'.")
     return result_handle
 
-# Exemple d'utilisation
-if sequences:
-    blast_results = run_blast(sequences)
 
 def parse_blast_results(blast_result_handle):
     # Lire et parser le fichier XML
@@ -75,6 +78,14 @@ def parse_blast_results(blast_result_handle):
             print("  Aucun hit trouvé.")
             print("-" * 50)
 
+
 # Exemple d'utilisation
-with open("blast_results.xml", "r") as result_handle:
-    parse_blast_results(result_handle)
+if __name__ == "__main__":
+    sequences = get_fasta_file()
+    if sequences:
+        program, database, evalue = get_blast_parameters()
+        blast_results = run_blast(sequences, program, database, evalue)
+        
+        # Lire les résultats BLAST enregistrés pour les analyser
+        with open("blast_results.xml", "r") as result_handle:
+            parse_blast_results(result_handle)
