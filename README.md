@@ -1,6 +1,6 @@
 # Biopython BLAST Automation
 
-This repository serves as an educational resource for learning how to use **Biopython**, a powerful library for bioinformatics tasks in Python. The project demonstrates how to work with sequence data, perform online BLAST (Basic Local Alignment Search Tool) queries, and retrieve results programmatically.
+This repository serves as an educational resource for learning how to use **Biopython** and for a project, a powerful library for bioinformatics tasks in Python. The project demonstrates how to work with sequence data, perform online BLAST (Basic Local Alignment Search Tool) queries, and retrieve results programmatically.
 
 ## Repository Contents
 
